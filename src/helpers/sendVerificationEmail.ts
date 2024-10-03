@@ -8,7 +8,7 @@ export async function sendVerificationEmail(
   verifyCode: string
 ): Promise<ApirResponse> {
   try {
-    const { data, error } = await resend.emails.send({
+    await resend.emails.send({
       from: 'onboarding@resend.dev',
       to: email,
       subject: 'Next App | Verification Code',
