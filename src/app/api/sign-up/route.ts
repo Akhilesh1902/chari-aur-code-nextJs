@@ -12,6 +12,9 @@ export async function POST(req: Request) {
       username,
       isVerified: true,
     });
+
+    // console.log({ email, password, username, existingUserVerifiedByUsername });
+
     if (existingUserVerifiedByUsername) {
       return Response.json(
         {
@@ -24,12 +27,13 @@ export async function POST(req: Request) {
       );
     }
     const existingUserByEmail = await UserModel.findOne({ email });
+    // console.log(existingUserByEmail);
 
     const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
 
     if (existingUserByEmail) {
       if (existingUserByEmail.isVerified) {
-        Response.json(
+        return Response.json(
           {
             success: false,
             message: 'User already exist with this email',
@@ -48,7 +52,6 @@ export async function POST(req: Request) {
       const hashedPassword = await bcrypt.hash(password, 10);
       const expiryDate = new Date();
       expiryDate.setHours(expiryDate.getHours() + 1);
-
       const newUser = new UserModel({
         username,
         email,
@@ -59,6 +62,7 @@ export async function POST(req: Request) {
         isAcceptingMessage: false,
         messages: [],
       });
+      // console.log({ verifyCode, hashedPassword, expiryDate, newUser });
 
       await newUser.save();
     }
@@ -69,16 +73,17 @@ export async function POST(req: Request) {
       username,
       verifyCode
     );
+    // console.log(emailResponse);
     if (!emailResponse.success) {
-      Response.json(
+      return Response.json(
         {
           success: false,
           message: emailResponse.message,
         },
-        { status: 500 }
+        { status: 200 }
       );
     }
-    Response.json(
+    return Response.json(
       {
         success: true,
         message: 'User Registered. Please verify your email',
@@ -86,7 +91,7 @@ export async function POST(req: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error regestring user', error);
+    // console.error('Error regestring user', error);
     return Response.json(
       {
         success: false,
