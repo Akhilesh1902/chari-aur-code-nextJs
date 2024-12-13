@@ -22,7 +22,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 
-const Page = () => {
+const SignUpPage = () => {
   const [username, setUsername] = useState('');
   const [usernameMessage, setUsernameMessage] = useState('');
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
@@ -125,7 +125,7 @@ const Page = () => {
                         ? 'text-green-500'
                         : 'text-red-500'
                     }`}>
-                    test {usernameMessage}
+                    {usernameMessage}
                   </p>
                   <FormMessage />
                 </FormItem>
@@ -192,4 +192,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default SignUpPage;
